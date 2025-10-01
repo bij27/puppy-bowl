@@ -125,3 +125,73 @@ function NewPlayerForm() {
   });
   return $form;
 }
+
+/** Deletes the player with the given ID */
+async function deletePlayer(id) {
+  try {
+    await fetch(API + "/" + id, {
+      method: "DELETE",
+    });
+    selectedPlayer = null;
+    await getPlayers();
+    render();
+  } catch (e) {
+    console.error("Error deleting player", e);
+    await getPlayers();
+    render();
+  }
+}
+
+async function addPlayer(playerData) {
+  try {
+    const res = await fetch(API, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(playerData),
+    });
+    const json = await res.json();
+
+    if (json.success) {
+      console.log("New player added:", json.data.newPlayer);
+      await getPlayers();
+      render();
+    } else {
+      console.error("Failed to add player:", json.error || "Unknown error.");
+    }
+  } catch (err) {
+    console.error("Error adding player:", err);
+  }
+}
+
+// === Render ===
+function render() {
+  const $app = document.querySelector("#app");
+  $app.innerHTML = `
+    <h1>Puppy Bowl</h1>
+    <main>
+      <section>
+        <h2>Players</h2>
+        <div id="player-list-container"></div>
+        <div id="new-player-form-container"></div>
+      </section>
+      <section id="selected">
+        <h2>Player Details</h2>
+        <div id="player-details-container"></div>
+      </section>
+    </main>
+  `;
+  $app.querySelector("#player-list-container").replaceWith(PlayerList());
+  $app.querySelector("#player-details-container").replaceWith(PlayerDetails());
+  $app.querySelector("#new-player-form-container").replaceWith(NewPlayerForm());
+}
+
+async function init() {
+  await getPlayers();
+  render();
+}
+
+init();
+
+//== final commit
