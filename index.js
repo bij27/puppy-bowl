@@ -83,3 +83,45 @@ function PlayerDetails() {
   <p><strong>Breed:</strong> ${selectedPlayer.breed}</p>
   <p><strong>Status:</strong> ${selectedPlayer.status}</p>
   `;
+
+  // === Delete button ==
+
+  const $deleteButton = document.createElement("button");
+  $deleteButton.textContent = "Remove puppy :(";
+
+  $deleteButton.addEventListener("click", async function () {
+    await deletePlayer(selectedPlayer.id);
+  });
+
+  $section.append($deleteButton);
+  return $section;
+}
+
+/** Form that allows users to input information about a new player */
+function NewPlayerForm() {
+  const $form = document.createElement("form");
+  $form.innerHTML = `
+        <label><strong>Name:</strong> <input name="name" required></label>
+        <label><strong>Breed:<strong> <input name="breed" required></label>
+        <label>Status:<select name="status" required>
+                <option value="bench">Bench</option>
+                <option value="field">Field</option>
+            </select>
+             </label>
+        <label>Image URL:<input name="imageUrl" "required></label>
+        <button class="add-btn">Add puppy!</button>
+    `;
+  $form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const data = new FormData($form);
+    addPlayer({
+      name: data.get("name"),
+      breed: data.get("breed"),
+      status: data.get("status"),
+      imageUrl: data.get("imageUrl"),
+      teamId: null,
+    });
+    $form.reset();
+  });
+  return $form;
+}
