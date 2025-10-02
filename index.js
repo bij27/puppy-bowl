@@ -6,6 +6,7 @@
  * @property {string} status
  * @property {string} imageUrl
  * @property {string} teamId
+ * @property {string} teamName
  */
 
 // === Constants ===
@@ -73,16 +74,26 @@ function PlayerDetails() {
     $p.textContent = "Please select a pup to learn more!";
     return $p;
   }
+
+  let teamName = "None (Free Agent)";
+  if (selectedPlayer.teamId === 1) {
+    teamName = "Team Ruff";
+  } else if (selectedPlayer.teamId === 2) {
+    teamName = "Team Fluff";
+  }
+
   const $section = document.createElement("section");
   $section.classList.add("player");
   $section.innerHTML = `
-  <figure>
-  <img alt="${selectedPlayer.teamId}" src="${selectedPlayer.imageUrl}"
-  </figure>
-  <p><strong>Name:</strong> ${selectedPlayer.name}</p>
-  <p><strong>Breed:</strong> ${selectedPlayer.breed}</p>
-  <p><strong>Status:</strong> ${selectedPlayer.status}</p>
-  `;
+  <figure>
+  <img alt="${selectedPlayer.teamId}" src="${selectedPlayer.imageUrl}"
+  </figure>
+  <p><strong>Name:</strong> ${selectedPlayer.name}</p>
+  <p><strong>Breed:</strong> ${selectedPlayer.breed}</p>
+  <p><strong>Status:</strong> ${selectedPlayer.status}</p>
+    <p><strong>Team Name:</strong> ${teamName}</p>
+  <p><strong>Team ID:</strong> ${selectedPlayer.teamId || "N/A"}</p>
+  `;
 
   // === Delete button ==
 
